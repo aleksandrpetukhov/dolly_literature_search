@@ -11,7 +11,7 @@ import numpy as np
 import logging
 logging.basicConfig(level=logging.DEBUG)
 
-from src.documents_retriever import get_documents
+from documents_retriever import get_documents
 
 class Retriever(object):
     def __init__(self, documents: list[list[str]]):
