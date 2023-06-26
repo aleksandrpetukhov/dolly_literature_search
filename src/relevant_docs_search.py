@@ -10,6 +10,7 @@ import gensim.downloader as api
 import numpy as np
 import logging
 logging.basicConfig(level=logging.DEBUG)
+from gensim.parsing.preprocessing import remove_stopwords, preprocess_string
 
 from documents_retriever import get_documents
 

@@ -1,4 +1,5 @@
 from pathlib import Path
+import re
 import requests
 import json
 import os
@@ -39,6 +40,8 @@ def get_documents_locally(dir="docs/") -> list[dict]:
     paths = os.listdir(dir)
     documents = []
     for file in paths:
+        if not re.match(".*.json", file):
+            continue
         with open(dir / file, "r", encoding="utf-8") as f:
             content = json.load(f)
         documents.append(content)
@@ -46,11 +49,11 @@ def get_documents_locally(dir="docs/") -> list[dict]:
 
 def get_documents() -> list[tuple[str, str]]:
     docs_path = Path("docs/")
-    if len(os.listdir(docs_path)) == 2:
+    if len(os.listdir(docs_path)) <= 2:
         pages = get_ducuments_from_url()
         for idx, page in enumerate(pages):
             with open(docs_path / f"{idx}.json", "w", encoding="utf-8") as f:
-                json.dump(page, f)
+                json.dump(page, f, ensure_ascii=False)
     else:
         pages = get_documents_locally(dir=docs_path)
     title_abstract_docs = []
