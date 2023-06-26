@@ -70,21 +70,13 @@ print(resutl['generated_text'])
 
 # COMMAND ----------
 
-test_text = """If data is the cornerstone to AI and ML, biotech should seemingly be awash in opportunity. The size of datasets is increasing rapidly with the rise of lab automation technologies, the fast pace at which drug discovery unfolds, and the sheer size of data in fields that do screening and sequencing in high-throughput. It’s predicted that biotech data collection will surpass all other fields, hurtling past even astronomy, to have the largest data volume by 2025.
+test_text = """The kidneys operate at the interface of plasma and urine by clearing molecular waste products while retaining valuable solutes. Genetic studies of paired plasma and urine metabolomes may identify underlying processes. We conducted genome-wide studies of 1,916 plasma and urine metabolites and detected 1,299 significant associations. Associations with 40% of implicated metabolites would have been missed by studying plasma alone. We detected urine-specific findings that provide information about metabolite reabsorption in the kidney, such as aquaporin (AQP)-7-mediated glycerol transport, and different metabolomic footprints of kidney-expressed proteins in plasma and urine that are consistent with their localization and function, including the transporters NaDC3 (SLC13A3) and ASBT (SLC10A2). Shared genetic determinants of 7,073 metabolite–disease combinations represent a resource to better understand metabolic diseases and revealed connections of dipeptidase 1 with circulating digestive enzymes and with hypertension. Extending genetic studies of the metabolome beyond plasma yields unique insights into processes at the interface of body compartments."""
 
-However, the abundance of data in pharma and the life sciences is widely understood to be a blessing and a curse. This is due to the heterogeneous and hierarchical nature of scientific data, which is perpetuated by how the data is generated, organized, and interpreted.
-
-In part, this pitfall occurs because data modeling is simply trickier in biology. In other fields where ML has momentum, such as online commerce, advertising, finance, or media, data models are easier to pin down and agree upon, industry-wide. This lowers the barrier to storing, standardizing, and analyzing across datasets. Meanwhile, scientific data modeling often varies wildly – even across a single team in an organization. For instance, the featurization of a genome can be debated endlessly, as the optimal representation has complex dependencies on the organism, the biological tools for manipulating them, and how uncertainty and updates are handled.
-
-In addition, training ML models in biology usually requires that you have captured a lot of process data and metadata to fuel models. Scientific observation of how a molecule performs is usually a complex function of how the molecule was produced, isolated, tested. For example, pooling data to measure yield or performance of different proteins likely would have terrible generalizability if you neglect any of tens of potential factors like the organism that produced it, or the scale at which the protein was produced. Models that unknowingly mix apples and oranges typically do not generalize to new data well in biotech.
-
-The mistake that we commonly see is that companies jump ahead, and do data science before solving the hard foundational problems of establishing the pipeline and flow of data for analysis. They don’t pause to operationalize the flow of data coming from experimental pipelines for usage by data scientists. As un-sexy as it is, companies need to build their data strategy and systems before benefitting from ML. Beyond simply collecting data, doing so in a standardized way and anticipating how the data should be consumed, is key. Companies need to design their data systems for the analytics and AI and ML they aim to layer on top."""
-
-test_question = "What is the main obstacle to applying ML in life sciences?"
+test_question = "How many associations exists between urine and plasma metabolites?"
 
 # COMMAND ----------
 
-llm_query = f"""Read the given text and answer the question based on the text and your prior knowledge. Text and question are going to be enclosed in single quotes and marked TEXT and QUESTION respectively.
+llm_query = f"""Read the given text and answer the question based on the text. Text and question are going to be enclosed in single quotes and marked TEXT and QUESTION respectively.
 
 TEXT:
 '{test_text}'
@@ -96,3 +88,7 @@ QUESTION:
 # COMMAND ----------
 
 instruct_pipeline(llm_query_template.format(papers_str=test_text, question=test_question))
+
+# COMMAND ----------
+
+
