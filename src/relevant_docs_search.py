@@ -64,15 +64,16 @@ def tokenize(document):
     return list(gensim.utils.tokenize(document.lower()))
 
 
-def show_scores(documents, scores, n=10):
+def show_scores(documents, titles, scores, n=10):
     for i, score in enumerate(scores):
         print("======== RANK: {} | SCORE: {} =======".format(i, score))
+        print(titles[i])
         print(documents[i])
         print("")
     print("\n")
 
 
-def get_most_relevant(query, titles, abstracts, n_docs=10) -> list[int]:
+def get_most_relevant(query, abstracts, n_docs=10) -> list[int]:
     print('Query: "{}"'.format(query))
 
     corpus = [list(gensim.utils.tokenize(doc.lower())) for doc in abstracts]
@@ -81,9 +82,6 @@ def get_most_relevant(query, titles, abstracts, n_docs=10) -> list[int]:
     retriever = Retriever(corpus)
     retrieval_indexes, _ = retriever.query(tokenized_query, n=n_docs)
 
-    retrieved_abstracts = [abstracts[idx] for idx in retrieval_indexes]
-    retrieved_titles = [titles[idx] for idx in retrieval_indexes]
-
     tokenzed_retrieved_abstracts = [corpus[idx] for idx in retrieval_indexes]
 
     embedding_map = api.load('glove-wiki-gigaword-50')
@@ -91,20 +89,26 @@ def get_most_relevant(query, titles, abstracts, n_docs=10) -> list[int]:
 
     ranker = Ranker(embedding_map=embedding_map)
     ranker_indexes, ranker_scores = ranker.rank(tokenized_query, tokenzed_retrieved_abstracts)
-    reranked_abstracts = [retrieved_abstracts[idx] for idx in ranker_indexes]
-    reranked_titles = [retrieved_titles[idx] for idx in ranker_indexes]
 
-    return reranked_abstracts, reranked_titles, ranker_scores
+    indexes = [retrieval_indexes[i] for i in ranker_indexes]
+
+    return indexes, ranker_scores
 
 @click.command()
 @click.option("--query", prompt="Search query", help="Search query")
 def main(query):
     documents = get_documents()
-    titles, abstracts = tuple(zip(*documents))
+    # titles, abstracts = tuple(zip(*documents))
+    titles = [doc[0] for doc in documents]
+    abstracts = [doc[1] for doc in documents]
 
-    reranked_abstracts, reranked_titles, ranker_scores = get_most_relevant(query, titles, abstracts)
+    indexes, ranker_scores = get_most_relevant(query, abstracts)
 
-    show_scores(reranked_abstracts, ranker_scores)
+    reranked_abstracts = [abstracts[i] for i in indexes]
+    reranked_titles = [titles[i] for i in indexes]
+
+    show_scores(reranked_abstracts, reranked_titles, ranker_scores)
+
     return reranked_abstracts, reranked_titles, ranker_scores
 
 
