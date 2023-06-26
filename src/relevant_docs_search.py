@@ -103,7 +103,7 @@ def main(query):
 
     reranked_abstracts, reranked_titles, ranker_scores = get_most_relevant(query, titles, abstracts)
 
-    # show_scores(reranked_abstracts, ranker_scores)
+    show_scores(reranked_abstracts, ranker_scores)
     return reranked_abstracts, reranked_titles, ranker_scores
 
 

@@ -45,14 +45,14 @@ def get_documents_locally(dir="docs/") -> list[dict]:
     return documents
 
 def get_documents() -> list[tuple[str, str]]:
-
-    if len(os.listdir("docs/")) == 2:
+    docs_path = Path("docs/")
+    if len(os.listdir(docs_path)) == 2:
         pages = get_ducuments_from_url()
         for idx, page in enumerate(pages):
-            with open(f"{idx}.json", "w", encoding="utf-8") as f:
+            with open(docs_path / f"{idx}.json", "w", encoding="utf-8") as f:
                 json.dump(page, f)
     else:
-        pages = get_documents_locally()
+        pages = get_documents_locally(dir=docs_path)
     title_abstract_docs = []
     for documents in pages:
         documents = documents["collection"]
